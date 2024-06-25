@@ -37,26 +37,24 @@ class TennisGame1(
 
     private fun computeEndGame(): String {
         val scoreGap = scorePlayer1 - scorePlayer2
-        return if (scoreGap == 1) {
-            "Advantage player1"
-        } else if (scoreGap == -1) {
-            "Advantage player2"
-        } else if (scoreGap >= 2) {
-            "Win for player1"
-        } else {
-            "Win for player2"
+        return when {
+            scoreGap == 1 -> buildAdvantage(player1Name)
+            scoreGap == -1 -> buildAdvantage(player2Name)
+            scoreGap >= 2 -> buildWin(player1Name)
+            else -> buildWin(player2Name)
         }
     }
 
+    private fun buildAdvantage(playerName: String) = "Advantage $playerName"
+    private fun buildWin(playerName: String) = "Win for $playerName"
+
     private fun computeEqualities(): String {
-        var score1 = ""
-        when (scorePlayer1) {
-            0 -> score1 = "Love-All"
-            1 -> score1 = "Fifteen-All"
-            2 -> score1 = "Thirty-All"
-            else -> score1 = "Deuce"
+        return when (scorePlayer1) {
+            0 -> "Love-All"
+            1 -> "Fifteen-All"
+            2 -> "Thirty-All"
+            else -> "Deuce"
         }
-        return score1
     }
 }
 
