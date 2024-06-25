@@ -53,3 +53,12 @@ class TennisGame1(
         return score
     }
 }
+
+enum class Scores(
+    val value: String,
+) {
+    LOVE("Love"),
+    FIFTEEN("Fifteen"),
+    THIRTY("Thirty"),
+    FORTY("Forty"),
+}
