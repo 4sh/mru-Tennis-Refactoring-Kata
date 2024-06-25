@@ -1,3 +1,5 @@
+import Scores.*
+
 class TennisGame1(
     private val player1Name: String,
     private val player2Name: String,
@@ -16,41 +18,60 @@ class TennisGame1(
     override fun getScore(): String {
         var score = ""
         var tempScore = 0
-        if (scorePlayer1 == scorePlayer2) {
-            when (scorePlayer1) {
-                0 -> score = "Love-All"
-                1 -> score = "Fifteen-All"
-                2 -> score = "Thirty-All"
-                else -> score = "Deuce"
-            }
+        score = if (scorePlayer1 == scorePlayer2) {
+            computeEqualities(score)
         } else if (scorePlayer1 >= 4 || scorePlayer2 >= 4) {
-            val minusResult = scorePlayer1 - scorePlayer2
-            if (minusResult == 1) {
-                score = "Advantage player1"
-            } else if (minusResult == -1) {
-                score = "Advantage player2"
-            } else if (minusResult >= 2) {
-                score = "Win for player1"
-            } else {
-                score = "Win for player2"
-            }
+            computeEndGame(score)
         } else {
-            for (i in 1..2) {
-                if (i == 1) {
-                    tempScore = scorePlayer1
-                } else {
-                    score += "-"
-                    tempScore = scorePlayer2
-                }
-                when (tempScore) {
-                    0 -> score += "Love"
-                    1 -> score += "Fifteen"
-                    2 -> score += "Thirty"
-                    3 -> score += "Forty"
-                }
-            }
+            computeRegularScore(tempScore, score)
         }
         return score
+    }
+
+    private fun computeRegularScore(tempScore: Int, score: String): String {
+        var tempScore1 = tempScore
+        var score1 = score
+        for (i in 1..2) {
+            if (i == 1) {
+                tempScore1 = scorePlayer1
+            } else {
+                score1 += "-"
+                tempScore1 = scorePlayer2
+            }
+            when (tempScore1) {
+                0 -> score1 += LOVE.value
+                1 -> score1 += FIFTEEN.value
+                2 -> score1 += THIRTY.value
+                3 -> score1 += FORTY.value
+            }
+        }
+        return score1
+    }
+
+    private fun computeEndGame(score: String): String {
+        var score1 = score
+        val minusResult = scorePlayer1 - scorePlayer2
+        if (minusResult == 1) {
+            score1 = "Advantage player1"
+        } else if (minusResult == -1) {
+            score1 = "Advantage player2"
+        } else if (minusResult >= 2) {
+            score1 = "Win for player1"
+        } else {
+            score1 = "Win for player2"
+        }
+        return score1
+    }
+
+    private fun computeEqualities(score: String): String {
+        var score1 = score
+        when (scorePlayer1) {
+            0 -> score1 = "Love-All"
+            1 -> score1 = "Fifteen-All"
+            2 -> score1 = "Thirty-All"
+            else -> score1 = "Deuce"
+        }
+        return score1
     }
 }
 
