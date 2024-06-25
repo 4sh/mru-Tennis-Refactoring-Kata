@@ -16,55 +16,40 @@ class TennisGame1(
     }
 
     override fun getScore(): String {
-        var score = ""
-        var tempScore = 0
-        score = if (scorePlayer1 == scorePlayer2) {
-            computeEqualities(score)
+        return if (scorePlayer1 == scorePlayer2) {
+            computeEqualities()
         } else if (scorePlayer1 >= 4 || scorePlayer2 >= 4) {
-            computeEndGame(score)
+            computeEndGame()
         } else {
-            computeRegularScore(tempScore, score)
+            computeRegularScore()
         }
-        return score
     }
 
-    private fun computeRegularScore(tempScore: Int, score: String): String {
-        var tempScore1 = tempScore
-        var score1 = score
-        for (i in 1..2) {
-            if (i == 1) {
-                tempScore1 = scorePlayer1
-            } else {
-                score1 += "-"
-                tempScore1 = scorePlayer2
-            }
-            when (tempScore1) {
-                0 -> score1 += LOVE.value
-                1 -> score1 += FIFTEEN.value
-                2 -> score1 += THIRTY.value
-                3 -> score1 += FORTY.value
-            }
-        }
-        return score1
+    private fun computeRegularScore(): String = "${scorePlayer1.toRegularScore()}-${scorePlayer2.toRegularScore()}"
+
+    private fun Int.toRegularScore() = when (this) {
+        0 -> LOVE.value
+        1 -> FIFTEEN.value
+        2 -> THIRTY.value
+        3 -> FORTY.value
+        else -> throw IllegalArgumentException()
     }
 
-    private fun computeEndGame(score: String): String {
-        var score1 = score
-        val minusResult = scorePlayer1 - scorePlayer2
-        if (minusResult == 1) {
-            score1 = "Advantage player1"
-        } else if (minusResult == -1) {
-            score1 = "Advantage player2"
-        } else if (minusResult >= 2) {
-            score1 = "Win for player1"
+    private fun computeEndGame(): String {
+        val scoreGap = scorePlayer1 - scorePlayer2
+        return if (scoreGap == 1) {
+            "Advantage player1"
+        } else if (scoreGap == -1) {
+            "Advantage player2"
+        } else if (scoreGap >= 2) {
+            "Win for player1"
         } else {
-            score1 = "Win for player2"
+            "Win for player2"
         }
-        return score1
     }
 
-    private fun computeEqualities(score: String): String {
-        var score1 = score
+    private fun computeEqualities(): String {
+        var score1 = ""
         when (scorePlayer1) {
             0 -> score1 = "Love-All"
             1 -> score1 = "Fifteen-All"
